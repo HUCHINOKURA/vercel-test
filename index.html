@@ -75,6 +75,7 @@
                 <strong>🎨 Mainvisual:</strong>
                 <div class="mainvisual">
                   ${work.mainvisual ? `
+                    <div><strong>⭐ Featured:</strong> ${work.mainvisual.featured === true ? '🟢 ON' : work.mainvisual.featured === false ? '🔴 OFF' : '⚪ 未設定'}</div>
                     ${work.mainvisual.slide_pc ? `
                       <div><strong>💻 PC画像:</strong><br>
                       <img src="${work.mainvisual.slide_pc.url}" style="max-width:300px;" title="${work.mainvisual.slide_pc.filename || ''}">
