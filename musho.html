@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>microCMSプレビュー（詳細展開版）</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style>
+    body { font-family: sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; }
+    .work { border: 1px solid #0066cc; margin: 20px 0; padding: 20px; border-radius: 8px; background: #f8f9ff; }
+    h2 { color: #0066cc; margin-top: 0; }
+    .field { margin: 12px 0; padding: 10px; background: white; border-radius: 4px; border-left: 4px solid #0066cc; }
+    .field strong { color: #0066cc; }
+    img { max-width: 250px; max-height: 180px; margin: 5px; border: 1px solid #ddd; border-radius: 4px; }
+    .credits, .mainvisual { background: #e8f4fd; padding: 12px; border-radius: 4px; margin: 8px 0; }
+    .credit-item { margin: 6px 0; padding: 6px; background: white; border-radius: 3px; }
+    code { background: #f0f0f0; padding: 2px 6px; border-radius: 3px; }
+  </style>
+</head>
+<body>
+  <h1>作品プレビュー（credit/mainvisual展開）</h1>
+  <div id="works"></div>
+
+  <script>
+    const SERVICE_ID = 'musho';
+    const API_KEY = 'ecEPXSX3zphSqKsOoKvD2XPS1dAcCMRwTJcV';       
+    const ENDPOINT = 'works';
+
+    async function fetchWorks() {
+      try {
+        const res = await fetch(`https://${SERVICE_ID}.microcms.io/api/v1/${ENDPOINT}?fields=slug,title,images,credit_TEST,mainvisual_TEST&limit=100`, {
+          headers: { 'X-API-KEY': API_KEY }
+        });
+        const data = await res.json();
+        
+        let html = `<p>全${data.totalCount}件取得</p>`;
+        
+        data.contents.forEach((work, index) => {
+          html += `
+            <div class="work">
+              <h2>#${index + 1} ${work.title || 'タイトルなし'}</h2>
+              
+              <div class="field">
+                <strong>🔗 Slug:</strong> 
+                ${work.slug ? `<code>${work.slug}</code>` : 'なし'}
+              </div>
+
+              <div class="field">
+                <strong>📝 Title:</strong> 
+                ${work.title || 'なし'}
+              </div>
+
+              <div class="field">
+                <strong>🖼️ Images:</strong><br>
+                ${work.images && work.images.length ? 
+                  work.images.map(img => 
+                    `<img src="${img.url}" alt="画像" title="${img.filename || 'no-name'}">`
+                  ).join('') : 'なし'
+                }
+              </div>
+
+              <div class="field">
+                <strong>👥 Credit_TEST:</strong>
+                <div class="credits">
+                  ${work.credit_TEST && work.credit_TEST.length ? 
+                    work.credit_TEST.map((credit, i) => `
+                      <div class="credit-item">
+                        <strong>${i+1}.</strong> ${credit.credit || credit.name || '名前なし'}
+                        ${credit.url ? ` <a href="${credit.url}" target="_blank">🔗</a>` : ''}
+                      </div>
+                    `).join('') : 'クレジットなし'
+                  }
+                </div>
+              </div>
+
+              <div class="field">
+                <strong>🎨 Mainvisual_TEST:</strong>
+                <div class="mainvisual">
+                  ${work.mainvisual_TEST ? `
+                    ${work.mainvisual_TEST.slide_pc ? `
+                      <div><strong>💻 PC画像:</strong><br>
+                      <img src="${work.mainvisual_TEST.slide_pc.url}" style="max-width:300px;" title="${work.mainvisual_TEST.slide_pc.filename || ''}">
+                      </div>
+                    ` : ''}
+                    ${work.mainvisual_TEST.slide_sp ? `
+                      <div style="margin-top:10px;"><strong>📱 SP画像:</strong><br>
+                      <img src="${work.mainvisual_TEST.slide_sp.url}" style="max-width:200px;" title="${work.mainvisual_TEST.slide_sp.filename || ''}">
+                      </div>
+                    ` : ''}
+                  ` : 'メインビジュアルデータなし'}
+                </div>
+              </div>
+            </div>
+          `;
+        });
+        
+        $('#works').html(html);
+      } catch (e) {
+        $('#works').html(`<p style="color:red; font-size:20px;">エラー: ${e.message}</p>`);
+      }
+    }
+    
+    $(document).ready(fetchWorks);
+  </script>
+</body>
+</html>
