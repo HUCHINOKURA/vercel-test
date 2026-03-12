@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>microCMSプレビュー（詳細展開版）</title>
+  <title>microCMSプレビュー（順番変更版）</title>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <style>
     body { font-family: sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; }
@@ -16,7 +16,7 @@
   </style>
 </head>
 <body>
-  <h1>作品プレビュー（credit/mainvisual展開）</h1>
+  <h1>作品プレビュー（指定順）</h1>
   <div id="works"></div>
 
   <script>
@@ -38,25 +38,19 @@
             <div class="work">
               <h2>#${index + 1} ${work.title || 'タイトルなし'}</h2>
               
+              <!-- 1. Slug -->
               <div class="field">
                 <strong>🔗 Slug:</strong> 
                 ${work.slug ? `<code>${work.slug}</code>` : 'なし'}
               </div>
 
+              <!-- 2. Title -->
               <div class="field">
                 <strong>📝 Title:</strong> 
                 ${work.title || 'なし'}
               </div>
 
-              <div class="field">
-                <strong>🖼️ Images:</strong><br>
-                ${work.images && work.images.length ? 
-                  work.images.map(img => 
-                    `<img src="${img.url}" alt="画像" title="${img.filename || 'no-name'}">`
-                  ).join('') : 'なし'
-                }
-              </div>
-
+              <!-- 3. Credit -->
               <div class="field">
                 <strong>👥 Credit:</strong>
                 <div class="credits">
@@ -71,6 +65,7 @@
                 </div>
               </div>
 
+              <!-- 4. Mainvisual -->
               <div class="field">
                 <strong>🎨 Mainvisual:</strong>
                 <div class="mainvisual">
@@ -88,6 +83,16 @@
                     ` : ''}
                   ` : 'メインビジュアルデータなし'}
                 </div>
+              </div>
+
+              <!-- 5. Images -->
+              <div class="field">
+                <strong>🖼️ Images:</strong><br>
+                ${work.images && work.images.length ? 
+                  work.images.map(img => 
+                    `<img src="${img.url}" alt="画像" title="${img.filename || 'no-name'}">`
+                  ).join('') : 'なし'
+                }
               </div>
             </div>
           `;
