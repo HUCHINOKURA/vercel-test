@@ -26,7 +26,7 @@
 
     async function fetchWorks() {
       try {
-        const res = await fetch(`https://${SERVICE_ID}.microcms.io/api/v1/${ENDPOINT}?fields=slug,title,images,credit_TEST,mainvisual_TEST&limit=100`, {
+        const res = await fetch(`https://${SERVICE_ID}.microcms.io/api/v1/${ENDPOINT}?fields=slug,title,images,credit,mainvisual&limit=100`, {
           headers: { 'X-API-KEY': API_KEY }
         });
         const data = await res.json();
@@ -58,10 +58,10 @@
               </div>
 
               <div class="field">
-                <strong>👥 Credit_TEST:</strong>
+                <strong>👥 Credit:</strong>
                 <div class="credits">
-                  ${work.credit_TEST && work.credit_TEST.length ? 
-                    work.credit_TEST.map((credit, i) => `
+                  ${work.credit && work.credit.length ? 
+                    work.credit.map((credit, i) => `
                       <div class="credit-item">
                         <strong>${i+1}.</strong> ${credit.credit || credit.name || '名前なし'}
                         ${credit.url ? ` <a href="${credit.url}" target="_blank">🔗</a>` : ''}
@@ -72,17 +72,17 @@
               </div>
 
               <div class="field">
-                <strong>🎨 Mainvisual_TEST:</strong>
+                <strong>🎨 Mainvisual:</strong>
                 <div class="mainvisual">
-                  ${work.mainvisual_TEST ? `
-                    ${work.mainvisual_TEST.slide_pc ? `
+                  ${work.mainvisual ? `
+                    ${work.mainvisual.slide_pc ? `
                       <div><strong>💻 PC画像:</strong><br>
-                      <img src="${work.mainvisual_TEST.slide_pc.url}" style="max-width:300px;" title="${work.mainvisual_TEST.slide_pc.filename || ''}">
+                      <img src="${work.mainvisual.slide_pc.url}" style="max-width:300px;" title="${work.mainvisual.slide_pc.filename || ''}">
                       </div>
                     ` : ''}
-                    ${work.mainvisual_TEST.slide_sp ? `
+                    ${work.mainvisual.slide_sp ? `
                       <div style="margin-top:10px;"><strong>📱 SP画像:</strong><br>
-                      <img src="${work.mainvisual_TEST.slide_sp.url}" style="max-width:200px;" title="${work.mainvisual_TEST.slide_sp.filename || ''}">
+                      <img src="${work.mainvisual.slide_sp.url}" style="max-width:200px;" title="${work.mainvisual.slide_sp.filename || ''}">
                       </div>
                     ` : ''}
                   ` : 'メインビジュアルデータなし'}
